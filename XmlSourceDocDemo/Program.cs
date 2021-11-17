@@ -6,7 +6,7 @@
     {
         private static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            //TODO: Demoprogramm zur Source Dokumentation
         }
     }
 }
