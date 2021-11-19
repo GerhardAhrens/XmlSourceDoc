@@ -1,0 +1,159 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>XmlSourceDocDemo</name>
+    </assembly>
+    <members>
+        <member name="T:XmlSourceDocDemo.DemoClassFull">
+            <summary>
+            Demoklasse
+            </summary>
+        </member>
+        <member name="M:XmlSourceDocDemo.DemoClassFull.#ctor">
+            <summary>
+            Konstruktormethode
+            </summary>
+        </member>
+        <member name="M:XmlSourceDocDemo.DemoClassFull.#ctor(System.String)">
+            <summary>
+            Konstruktormethode mit Parameter, String
+            </summary>
+            <param name="args">Parameter, string</param>
+        </member>
+        <member name="M:XmlSourceDocDemo.DemoClassFull.#ctor(System.Int32)">
+            <summary>
+            Konstruktormethode mit Parameter, Integer
+            </summary>
+            <param name="args">Parameter, int</param>
+        </member>
+        <member name="M:XmlSourceDocDemo.DemoClassFull.#ctor(System.Int32,System.String)">
+            <summary>
+            Konstruktormethode mit Parameter, Integer, String
+            </summary>
+            <param name="argsInt">Parameter int</param>
+            <param name="argsString">Parameter string</param>
+        </member>
+        <member name="P:XmlSourceDocDemo.DemoClassFull.Numeric">
+            <summary>
+            Get/Set for Numeric Value
+            </summary>
+        </member>
+        <member name="P:XmlSourceDocDemo.DemoClassFull.CurrentDateTime">
+            <summary>
+            Gibt die aktuelle Datum/Zeit zurück
+            </summary>
+        </member>
+        <member name="M:XmlSourceDocDemo.DemoClassFull.ShowName(System.String)">
+            <summary>
+            Display a name
+            </summary>
+            <param name="name">Textparameter</param>
+            <example>
+            Beispiel: ShowName("Gerhard")
+            </example>
+            <remarks>
+            Prüfen, ob der Tag in der XML Docu auftaucht
+            </remarks>
+        </member>
+        <member name="M:XmlSourceDocDemo.DemoClassFull.ShowName(System.String,System.Byte)">
+            <summary>
+            Display a name a certain number of times
+            </summary>
+        </member>
+        <member name="M:XmlSourceDocDemo.DemoClassFull.ShowGenericType``1(``0)">
+            <summary>
+            Display the type of the variable passed in, One Args
+            </summary>
+        </member>
+        <member name="M:XmlSourceDocDemo.DemoClassFull.ShowGenericType``2(``0,``1)">
+            <summary>
+            Display the type of the variable passed in, Two Args
+            </summary>
+        </member>
+        <member name="M:XmlSourceDocDemo.DemoClassFull.ShowNullableInt(System.Nullable{System.Int32})">
+            <summary>
+            Display the value of a nullable integer
+            </summary>
+        </member>
+        <member name="M:XmlSourceDocDemo.DemoClassFull.Calc(System.Double,System.Double,System.String)">
+            <summary>
+            Die Methode führ eine Kalkulation durch
+            </summary>
+            <param name="v1">Wert 1</param>
+            <param name="v2">Wert 2</param>
+            <param name="op">Opearor (+, -, *, /)</param>
+            <returns>Ergebnis der Kalkulation</returns>
+        </member>
+        <member name="M:XmlSourceDocDemo.DemoClassFull.Calc(System.Double,System.Double,XmlSourceDocDemo.Operators)">
+            <summary>
+            Die Methode führ eine Kalkulation durch
+            </summary>
+            <param name="v1">Wert 1</param>
+            <param name="v2">Wert 2</param>
+            <param name="op">Opearor (+, -, *, /)</param>
+            <returns>Ergebnis der Kalkulation</returns>
+        </member>
+        <member name="M:XmlSourceDocDemo.DemoClassFull.ToString">
+            <summary>
+            Klasseninhalt als String zurückgeben
+            </summary>
+            <returns>Inhalt als String</returns>
+        </member>
+        <member name="T:XmlSourceDocDemo.DemoClassShort">
+            <summary>
+            Eine kleine Demo Klasse
+            </summary>
+        </member>
+        <member name="M:XmlSourceDocDemo.DemoClassShort.#ctor">
+            <summary>
+            Konstruktor ohne Parameter
+            </summary>
+        </member>
+        <member name="M:XmlSourceDocDemo.DemoClassShort.ToString">
+            <summary>
+            Klasseninhalt als String zurückgeben
+            </summary>
+            <returns>Inhalt als String</returns>
+        </member>
+        <member name="T:XmlSourceDocDemo.Operators">
+            <summary>
+            Operatoren für Calc
+            </summary>
+        </member>
+        <member name="F:XmlSourceDocDemo.Operators.None">
+            <summary>
+            Nix
+            </summary>
+        </member>
+        <member name="F:XmlSourceDocDemo.Operators.Add">
+            <summary>
+            Add
+            </summary>
+        </member>
+        <member name="F:XmlSourceDocDemo.Operators.Sub">
+            <summary>
+            Substraction
+            </summary>
+        </member>
+        <member name="F:XmlSourceDocDemo.Operators.Mult">
+            <summary>
+            Multiplikation
+            </summary>
+        </member>
+        <member name="F:XmlSourceDocDemo.Operators.Div">
+            <summary>
+            Division
+            </summary>
+        </member>
+        <member name="T:XmlSourceDocDemo.Program">
+            <summary>
+            Startprogramm
+            </summary>
+            <remarks>
+            https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/documentation-comments
+            https://www.codeproject.com/articles/11701/documentation-in-c
+            https://www.oreilly.com/library/view/c-in-a/0596001819/ch04s10.html
+            </remarks>
+        </member>
+    </members>
+</doc>

@@ -5,6 +5,10 @@
      <TargetFramework>net5.0-windows</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>D:\_LCubeRepositories\XmlSourceDoc\XmlSourceDocDemo\XmlSourceDocDemo.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\XmlSourceDoc\XmlSourceDoc.csproj" />
   </ItemGroup>

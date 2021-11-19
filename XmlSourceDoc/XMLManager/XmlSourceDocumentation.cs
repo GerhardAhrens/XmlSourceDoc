@@ -25,6 +25,11 @@
         /// <param name="value">Ohne</param>
         public XmlSourceDocumentation(string xmlFile, string value = "")
         {
+            if (File.Exists(xmlFile) == false)
+            {
+                throw new FileNotFoundException("XML Documenation File not found!", xmlFile);
+            }
+
             XDocument doc = XDocument.Load(xmlFile);
             foreach (XElement element in doc.Element("doc").Element("members").Elements())
             {
@@ -132,7 +137,7 @@
                                 sdoc.Constructor = $"{sdoc.Class}()";
                                 sdoc.Summary = this.MemberSummaries[xmlName].Summary;
                                 sdoc.Remark = this.MemberSummaries[xmlName].Remark;
-                                sdoc.Example = this.MemberSummaries[xmlName].Example;
+                                sdoc.Example = this.MemberSummaries[xmlName].Example == null ? string.Empty : this.MemberSummaries[xmlName].Example;
                                 result.Add(sdoc);
                             }
 
@@ -157,7 +162,7 @@
                                         sdoc.Constructor = $"{sdoc.Class}()";
                                         sdoc.Summary = this.MemberSummaries[xmlName].Summary;
                                         sdoc.Remark = this.MemberSummaries[xmlName].Remark;
-                                        sdoc.Example = this.MemberSummaries[xmlName].Example;
+                                        sdoc.Example = this.MemberSummaries[xmlName].Example == null ? string.Empty : this.MemberSummaries[xmlName].Example;
                                         result.Add(sdoc);
                                     }
                                 }
@@ -187,7 +192,7 @@
                                         sdoc.MemberParams = this.MemberSummaries[xmlName].MemberParams;
                                         sdoc.Parameter = ctorParams;
                                         sdoc.Remark = this.MemberSummaries[xmlName].Remark;
-                                        sdoc.Example = this.MemberSummaries[xmlName].Example;
+                                        sdoc.Example = this.MemberSummaries[xmlName].Example == null ? string.Empty : this.MemberSummaries[xmlName].Example;
                                         result.Add(sdoc);
                                     }
                                 }
@@ -219,7 +224,7 @@
                             sdoc.Member = xmlName;
                             sdoc.Summary = this.MemberSummaries[xmlName].Summary;
                             sdoc.Remark = this.MemberSummaries[xmlName].Remark;
-                            sdoc.Example = this.MemberSummaries[xmlName].Example;
+                            sdoc.Example = this.MemberSummaries[xmlName].Example == null ? string.Empty : this.MemberSummaries[xmlName].Example;
                             result.Add(sdoc);
                         }
 
@@ -236,8 +241,8 @@
                                     enumDoc.Member = xmlName;
                                     enumDoc.MemberTyp = this.MemberSummaries[xmlName].MemberTyp;
                                     enumDoc.Summary = this.MemberSummaries[xmlName].Summary;
-                                    sdoc.Remark = this.MemberSummaries[xmlName].Remark;
-                                    sdoc.Example = this.MemberSummaries[xmlName].Example;
+                                    enumDoc.Remark = this.MemberSummaries[xmlName].Remark;
+                                    enumDoc.Example = this.MemberSummaries[xmlName].Example == null ? string.Empty : this.MemberSummaries[xmlName].Example;
                                     result.Add(enumDoc);
                                 }
                             }
@@ -275,7 +280,7 @@
                             sdoc.Summary = this.MemberSummaries[xmlName].Summary;
                             sdoc.Return = new Tuple<string, string>(mi.ReturnType.FullName, this.MemberSummaries[xmlName].Returns);
                             sdoc.Remark = this.MemberSummaries[xmlName].Remark;
-                            sdoc.Example = this.MemberSummaries[xmlName].Example;
+                            sdoc.Example = this.MemberSummaries[xmlName].Example == null ? string.Empty : this.MemberSummaries[xmlName].Example;
                             result.Add(sdoc);
                         }
                     }

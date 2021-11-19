@@ -24,7 +24,7 @@
             string xmlFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "XmlSourceDocDemo.xml");
             XmlSourceDocumentation xd = new XmlSourceDocumentation(xmlFile);
 
-            Type classType = typeof(DemoClassShort);
+            Type classType = typeof(Operators);
             IEnumerable<SourceDocumentation> docList = xd.Get(classType);
             foreach (SourceDocumentation docItem in docList)
             {
