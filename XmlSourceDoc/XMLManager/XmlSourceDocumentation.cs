@@ -72,14 +72,50 @@
                 string xmlExample = element.Elements("example").Count() == 0 ? string.Empty : element.Element("example").Value.Trim();
                 string xmlRemarks = element.Elements("remarks").Count() == 0 ? string.Empty : element.Element("remarks").Value.Trim();
 
-                List<string> xmlMemberParams = new List<string>();
+                Dictionary<string,Tuple<string,string,string>> xmlMemberParams = new Dictionary<string, Tuple<string, string, string>>();
                 if (element.Elements("param") != null && element.Elements("param").Count() > 0)
                 {
+                    int parameterIndex = 0;
                     foreach (XElement item in element.Elements("param"))
                     {
+                        string typeContent = string.Empty;
+                        string parameterTyp = string.Empty;
+                        if (xmlFullnameWithTypes.Contains("(") == true && xmlFullnameWithTypes.Contains(")") == true 
+                            && xmlFullnameWithTypes.Contains("{") == false && xmlFullnameWithTypes.Contains("}") == false)
+                        {
+                            var tempList = xmlFullnameWithTypes.ExtractFromString("(", ")").Where(x => x != null).ToList();
+                            typeContent = tempList[0].Split(',', StringSplitOptions.RemoveEmptyEntries)[parameterIndex];
+                            parameterTyp = "System";
+                        }
+                        else
+                        {
+                            List<string> tempList = xmlFullnameWithTypes.ExtractFromString("(", ")").Where(x => x != null).ToList();
+                            if (tempList.Count > 1)
+                            {
+                                string tempPart = xmlFullnameWithTypes.ExtractFromString("(", ")").Where(x => x != null).ToList()[parameterIndex];
+                            }
+                            else
+                            {
+                                var tempListA = xmlFullnameWithTypes.ExtractFromString("(", ")").Where(x => x != null).ToList();
+                                if (tempListA[0].EndsWith("}") == true)
+                                {
+                                    var tempListG = xmlFullnameWithTypes.ExtractFromString("(", ")").Where(x => x != null).ToList();
+                                    parameterTyp = tempListG[0].Substring(0, tempListG[0].IndexOf('{'));
+                                    typeContent = tempListG[0].ExtractFromString("{", "}").Where(x => x != null).ToList()[0];
+                                }
+                                else
+                                {
+                                    var argsList = tempListA[0].Split(',');
+
+                                }
+                            }
+                        }
+
+                        parameterIndex++;
+
                         string attributeName = item.FirstAttribute.Value;
-                        string attributeValue = ((XText)item.FirstNode).Value;
-                        xmlMemberParams.Add($"{attributeName} = {attributeValue}");
+                        string attributeValue = ((XText)item.FirstNode)?.Value.ToString();
+                        xmlMemberParams.Add(attributeName,new Tuple<string, string, string>(parameterTyp, typeContent, attributeValue));
                     }
                 }
 
@@ -105,6 +141,7 @@
             }
         }
 
+        /*
         public IEnumerable<SourceDocumentation> Get(Type classType)
         {
             List<SourceDocumentation> result = null;
@@ -293,6 +330,7 @@
 
             return result.OrderBy(o => o.PositionInDoc);
         }
+        */
 
         /// <summary>
         /// Return a pretty description of the full method
@@ -416,7 +454,7 @@
         /// <summary>
         /// MemberParams
         /// </summary>
-        public List<string> XmlParams(MethodInfo mi)
+        public Dictionary<string,Tuple<string, string, string>> XmlParams(MethodInfo mi)
         {
             string xmlName = this.GetKeyName(mi);
 
@@ -427,7 +465,7 @@
             }
             else
             {
-                return new List<string>() { "PARAM NOT FOUND!" };
+                return null;
             }
         }
 

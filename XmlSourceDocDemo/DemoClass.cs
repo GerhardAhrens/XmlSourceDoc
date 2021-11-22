@@ -1,6 +1,7 @@
 ﻿namespace XmlSourceDocDemo
 {
     using System;
+    using System.Collections.Generic;
 
     /// <summary>
     /// Demoklasse
@@ -38,6 +39,32 @@
         public DemoClassFull(int argsInt, string argsString)
         {
         }
+
+        /// <summary>
+        /// Konstruktormethode mit Parameter, Tuple
+        /// </summary>
+        /// <param name="argsTuple">Ein Tuple als Parameter</param>
+        public DemoClassFull(Tuple<string, bool> argsTuple)
+        {
+        }
+
+        /// <summary>
+        /// Konstruktormethode mit Parameter, List of String
+        /// </summary>
+        /// <param name="args">Parameter als List of String</param>
+        public DemoClassFull(List<string> args)
+        {
+        }
+
+        /// <summary>
+        /// Konstruktormethode mit Parameter, List of String, Boolean
+        /// </summary>
+        /// <param name="args"></param>
+        /// <param name="argsBool"></param>
+        public DemoClassFull(List<string> args, bool argsBool)
+        {
+        }
+
 
         /// <summary>
         /// Get/Set for Numeric Value

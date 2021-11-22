@@ -33,6 +33,25 @@
             <param name="argsInt">Parameter int</param>
             <param name="argsString">Parameter string</param>
         </member>
+        <member name="M:XmlSourceDocDemo.DemoClassFull.#ctor(System.Tuple{System.String,System.Boolean})">
+            <summary>
+            Konstruktormethode mit Parameter, Tuple
+            </summary>
+            <param name="argsTuple">Ein Tuple als Parameter</param>
+        </member>
+        <member name="M:XmlSourceDocDemo.DemoClassFull.#ctor(System.Collections.Generic.List{System.String})">
+            <summary>
+            Konstruktormethode mit Parameter, List of String
+            </summary>
+            <param name="args">Parameter als List of String</param>
+        </member>
+        <member name="M:XmlSourceDocDemo.DemoClassFull.#ctor(System.Collections.Generic.List{System.String},System.Boolean)">
+            <summary>
+            Konstruktormethode mit Parameter, List of String, Boolean
+            </summary>
+            <param name="args"></param>
+            <param name="argsBool"></param>
+        </member>
         <member name="P:XmlSourceDocDemo.DemoClassFull.Numeric">
             <summary>
             Get/Set for Numeric Value

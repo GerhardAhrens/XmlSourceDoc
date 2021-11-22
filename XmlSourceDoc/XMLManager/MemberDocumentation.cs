@@ -25,7 +25,7 @@
         /// <summary>
         /// Beschreibung zu den Parameterns
         /// </summary>
-        public List<string> MemberParams { get; set; }
+        public Dictionary<string,Tuple<string, string, string>> MemberParams { get; set; }
 
         /// <summary>
         /// Return Member

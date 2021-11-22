@@ -24,7 +24,8 @@
             string xmlFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "XmlSourceDocDemo.xml");
             XmlSourceDocumentation xd = new XmlSourceDocumentation(xmlFile);
 
-            Type classType = typeof(Operators);
+            /*
+            Type classType = typeof(DemoClassFull);
             IEnumerable<SourceDocumentation> docList = xd.Get(classType);
             foreach (SourceDocumentation docItem in docList)
             {
@@ -128,6 +129,7 @@
                     Console.WriteLine(new string('-', 40), ConsoleColor.Blue);
                 }
             }
+            */
 
             Console.ReadKey();
         }
