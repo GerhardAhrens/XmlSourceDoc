@@ -8,6 +8,8 @@
     /// </summary>
     public class MemberDocumentation
     {
+        public string Assembly { get; set; }
+
         /// <summary>
         /// Membertyp
         /// </summary>

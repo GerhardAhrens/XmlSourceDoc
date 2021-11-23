@@ -33,8 +33,8 @@
             XDocument doc = XDocument.Load(xmlFile);
             foreach (XElement element in doc.Element("doc").Element("members").Elements())
             {
+                string asssembly = ((XElement)((XContainer)element.Document.Document.FirstNode).FirstNode).Value;
                 string xmlFullnameWithTypes = element.FirstAttribute.Value;
-
                 string xmlFullname = this.RemoveContent(xmlFullnameWithTypes);
 
                 string typ = string.Empty;
@@ -75,47 +75,47 @@
                 Dictionary<string,Tuple<string,string,string>> xmlMemberParams = new Dictionary<string, Tuple<string, string, string>>();
                 if (element.Elements("param") != null && element.Elements("param").Count() > 0)
                 {
+                    Dictionary<XElement,string> paramsFromTag = new Dictionary<XElement,string>();
+                    List<string> tempParameters = xmlFullnameWithTypes.ExtractFromString("(", ")").Where(x => x != null).ToList();
+                    List<string> parameterList = null;
+                    if (tempParameters[0].Contains("{") == true && tempParameters[0].Contains("}") == true)
+                    {
+                        parameterList = new List<string>();
+                        parameterList.Add(tempParameters[0]);
+                    }
+                    else
+                    {
+                        parameterList = tempParameters[0].Split(',', StringSplitOptions.RemoveEmptyEntries).ToList();
+                    }
+
                     int parameterIndex = 0;
                     foreach (XElement item in element.Elements("param"))
                     {
-                        string typeContent = string.Empty;
-                        string parameterTyp = string.Empty;
-                        if (xmlFullnameWithTypes.Contains("(") == true && xmlFullnameWithTypes.Contains(")") == true 
-                            && xmlFullnameWithTypes.Contains("{") == false && xmlFullnameWithTypes.Contains("}") == false)
+                        paramsFromTag.Add(item, parameterList[parameterIndex]);
+                        parameterIndex++;
+                    }
+
+                    foreach (KeyValuePair<XElement, string> item in paramsFromTag)
+                    {
+                        string paramName = item.Key.FirstAttribute.Value;
+                        string paramDescription = ((XText)item.Key.FirstNode)?.Value;
+                        string paramType = string.Empty;
+                        string paramItemTyp = string.Empty;
+                        if (item.Value.Contains("{") == true && item.Value.Contains("}") == true)
                         {
-                            var tempList = xmlFullnameWithTypes.ExtractFromString("(", ")").Where(x => x != null).ToList();
-                            typeContent = tempList[0].Split(',', StringSplitOptions.RemoveEmptyEntries)[parameterIndex];
-                            parameterTyp = "System";
+                            int firstPos = item.Value.LastIndexOf('{');
+                            string paramTypeTemp = item.Value.Substring(0, firstPos);
+                            int lastPos = paramTypeTemp.LastIndexOf('.') + 1;
+                            paramType = paramTypeTemp.Substring(lastPos);
+                            paramItemTyp = item.Value.ExtractFromString("{", "}").Where(x => x != null).ToList()[0];
                         }
                         else
                         {
-                            List<string> tempList = xmlFullnameWithTypes.ExtractFromString("(", ")").Where(x => x != null).ToList();
-                            if (tempList.Count > 1)
-                            {
-                                string tempPart = xmlFullnameWithTypes.ExtractFromString("(", ")").Where(x => x != null).ToList()[parameterIndex];
-                            }
-                            else
-                            {
-                                var tempListA = xmlFullnameWithTypes.ExtractFromString("(", ")").Where(x => x != null).ToList();
-                                if (tempListA[0].EndsWith("}") == true)
-                                {
-                                    var tempListG = xmlFullnameWithTypes.ExtractFromString("(", ")").Where(x => x != null).ToList();
-                                    parameterTyp = tempListG[0].Substring(0, tempListG[0].IndexOf('{'));
-                                    typeContent = tempListG[0].ExtractFromString("{", "}").Where(x => x != null).ToList()[0];
-                                }
-                                else
-                                {
-                                    var argsList = tempListA[0].Split(',');
-
-                                }
-                            }
+                            int lastPos = item.Value.LastIndexOf('.') + 1;
+                            paramType = item.Value.Substring(lastPos);
                         }
 
-                        parameterIndex++;
-
-                        string attributeName = item.FirstAttribute.Value;
-                        string attributeValue = ((XText)item.FirstNode)?.Value.ToString();
-                        xmlMemberParams.Add(attributeName,new Tuple<string, string, string>(parameterTyp, typeContent, attributeValue));
+                        xmlMemberParams.Add(paramName, new Tuple<string, string, string>(paramType, paramItemTyp, paramDescription));
                     }
                 }
 
@@ -127,6 +127,7 @@
 
                 MemberDocumentation mdoc = new MemberDocumentation()
                 {
+                    Assembly = asssembly,
                     FullName = xmlFullname,
                     FullNameWithTyp = xmlFullnameWithTypes,
                     MemberTyp = xmlTyp,
@@ -139,6 +140,28 @@
 
                 this.MemberSummaries[xmlFullnameWithTypes.Substring(2)] = mdoc;
             }
+        }
+
+        public IEnumerable<SourceDocumentation> Get()
+        {
+            List<SourceDocumentation> result = null;
+
+            if (this.MemberSummaries != null && this.MemberSummaries.Count > 0)
+            {
+                result = new List<SourceDocumentation>();
+                int positionInDoc = 0;
+                foreach (KeyValuePair< string, MemberDocumentation> item in this.MemberSummaries)
+                {
+                    positionInDoc++;
+                    SourceDocumentation sdoc = new SourceDocumentation();
+                    sdoc.PositionInDoc = positionInDoc;
+                    sdoc.Assembly = item.Value.Assembly;
+                    result.Add(sdoc);
+                }
+
+            }
+
+            return result;
         }
 
         /*
