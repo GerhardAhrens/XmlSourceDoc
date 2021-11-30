@@ -17,6 +17,23 @@ namespace XmlSourceDocDemo
             this.memorySource = new ConcurrentDictionary<Type, TDomain>();
         }
 
+        public int CountAll()
+        {
+            return this.memorySource.Count;
+        }
+
+        public int CountByType()
+        {
+            int result = 0;
+            if (memorySource != null)
+            {
+                Type typ = typeof(TDomain);
+                result = this.memorySource.Count(w => w.Key == typ);
+            }
+
+            return result;
+        }
+
         public TDomain FindById(Guid id)
         {
             TDomain result = default(TDomain);
@@ -25,7 +42,7 @@ namespace XmlSourceDocDemo
             {
                 if (this.memorySource.Any(a => a.Value.Id == id))
                 {
-                    result = (TDomain)this.memorySource.Where(w => w.Value.Id == id);
+                    result = (TDomain)this.memorySource.Where(w => w.Value.Id == id).FirstOrDefault().Value;
                 }
             }
 
@@ -51,10 +68,35 @@ namespace XmlSourceDocDemo
             }
         }
 
-        public void Remove(TDomain domainObj)
+        public void Delete(TDomain domainObj)
         {
             if (this.memorySource != null)
             {
+                Type typ = typeof(TDomain);
+                this.memorySource.TryRemove(typ, out domainObj);
+            }
+        }
+
+        public void DeleteAllByType()
+        {
+            if (this.memorySource != null)
+            {
+                Type typ = typeof(TDomain);
+                List<TDomain> byType = this.memorySource.Where(c => c.Key == typ).Select(s => s.Value).ToList();
+                for (int i = 0; i < byType.Count; i++)
+                {
+                    TDomain oldDomain = this.memorySource.Where(w => w.Value.Id == byType[i].Id).FirstOrDefault().Value;
+                    this.memorySource.TryRemove(typ, out oldDomain);
+                }
+            }
+        }
+
+        public void DeleteAll()
+        {
+            if (this.memorySource != null)
+            {
+                Type typ = typeof(TDomain);
+                this.memorySource.Clear();
             }
         }
     }
@@ -72,6 +114,29 @@ namespace XmlSourceDocDemo
 
         void Update(TDomain domainObj);
 
-        void Remove(TDomain domainObj);
+        void Delete(TDomain domainObj);
+    }
+
+    public sealed class MemoryContent<TDomain> : Tuple<Type, TDomain>
+    {
+        public MemoryContent(Type key, TDomain value) : base(key,value)
+        {
+        }
+
+        public Type Key
+        {
+            get
+            {
+                return this.Item1;
+            }
+        }
+
+        public TDomain Value
+        {
+            get
+            {
+                return this.Item2;
+            }
+        }
     }
 }

@@ -22,18 +22,48 @@
         {
             DemoClassShort dom = new DemoClassShort();
             dom.Id = Guid.NewGuid();
-            dom.ClassName = "Test-A";
+            dom.ClassName = "Test-1-A";
 
+            List<MemoryContent<DemoClassShort>> source = new List<MemoryContent<DemoClassShort>>();
+            MemoryContent<DemoClassShort> mc = new XmlSourceDocDemo.MemoryContent<DemoClassShort>(typeof(DemoClassShort), dom);
+            source.Add(mc);
+
+            var keys = source.Count(c => c.Key == typeof(DemoClassShort));
+
+            /*
             InMemoryRepository<DemoClassShort> repository = new InMemoryRepository<DemoClassShort>();
+            Console.WriteLine($"Count={repository.CountByType()}", ConsoleColor.Yellow);
             repository.Add(dom);
+
+            DemoClassShort dom2 = new DemoClassShort();
+            dom.Id = Guid.NewGuid();
+            dom.ClassName = "Test-2-A";
+            repository.Add(dom2);
+            Console.WriteLine($"Count={repository.CountByType()}", ConsoleColor.Yellow);
+
+            DemoClassShort result1 = repository.FindById(dom.Id);
+
+            Console.WriteLine($"Count={repository.CountByType()}",ConsoleColor.Yellow);
+            Console.WriteLine(result1.ClassName);
 
             dom.ClassName = "Test-B";
             repository.Update(dom);
+            Console.WriteLine($"Count={repository.CountByType()}", ConsoleColor.Yellow);
+            DemoClassShort result2 = repository.FindById(dom.Id);
+            Console.WriteLine(result2.ClassName);
+
+            repository.DeleteAllByType();
+
+            repository.Delete(result2);
+            Console.WriteLine(repository.CountByType());
+            */
+
+            /*
 
             // read XML file to get info about documented methods
             string xmlFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "XmlSourceDocDemo.xml");
             XmlSourceDocumentation xd = new XmlSourceDocumentation(xmlFile);
-
+            */
             /*
             Type classType = typeof(DemoClassFull);
             IEnumerable<SourceDocumentation> docList = xd.Get(classType);
