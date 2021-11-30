@@ -11,10 +11,10 @@ namespace XmlSourceDocDemo
 
     public class InMemoryRepository<TDomain> : IRepository<TDomain> where TDomain : IDomainRoot
     {
-        private readonly ConcurrentDictionary<Type, TDomain> memorySource = null;
+        List<MemoryContent<TDomain>> memorySource = null;
         public InMemoryRepository()
         {
-            this.memorySource = new ConcurrentDictionary<Type, TDomain>();
+            this.memorySource = new List<MemoryContent<TDomain>>(); 
         }
 
         public int CountAll()
@@ -42,7 +42,7 @@ namespace XmlSourceDocDemo
             {
                 if (this.memorySource.Any(a => a.Value.Id == id))
                 {
-                    result = (TDomain)this.memorySource.Where(w => w.Value.Id == id).FirstOrDefault().Value;
+                    result = this.memorySource.Where(w => w.Value.Id == id).FirstOrDefault().Value;
                 }
             }
 
@@ -54,7 +54,8 @@ namespace XmlSourceDocDemo
             if (this.memorySource != null)
             {
                 Type typ = typeof(TDomain);
-                this.memorySource.TryAdd(typ, domainObj);
+                MemoryContent<TDomain> mc = new MemoryContent<TDomain>(typ, domainObj);
+                this.memorySource.Add(mc);
             }
         }
 
@@ -63,8 +64,10 @@ namespace XmlSourceDocDemo
             if (this.memorySource != null)
             {
                 Type typ = typeof(TDomain);
-                TDomain oldDomain = this.memorySource.Where(w => w.Value.Id == domainObj.Id).FirstOrDefault().Value;
-                this.memorySource.TryUpdate(typ, domainObj, (TDomain)oldDomain);
+                TDomain oldDomain = (TDomain)this.memorySource.Where(w => w.Value.Id == domainObj.Id).FirstOrDefault().Value;
+                var index = this.memorySource.FindIndex(w => w.Value.Id == oldDomain.Id);
+                MemoryContent<TDomain> mc = new MemoryContent<TDomain>(typ, domainObj);
+                this.memorySource[index] = mc;
             }
         }
 
@@ -73,7 +76,8 @@ namespace XmlSourceDocDemo
             if (this.memorySource != null)
             {
                 Type typ = typeof(TDomain);
-                this.memorySource.TryRemove(typ, out domainObj);
+                MemoryContent<TDomain> mc = new MemoryContent<TDomain>(typ, domainObj);
+                this.memorySource.Remove(mc);
             }
         }
 
@@ -86,7 +90,8 @@ namespace XmlSourceDocDemo
                 for (int i = 0; i < byType.Count; i++)
                 {
                     TDomain oldDomain = this.memorySource.Where(w => w.Value.Id == byType[i].Id).FirstOrDefault().Value;
-                    this.memorySource.TryRemove(typ, out oldDomain);
+                    MemoryContent<TDomain> mc = new MemoryContent<TDomain>(typ, oldDomain);
+                    this.memorySource.Remove(mc);
                 }
             }
         }
@@ -98,6 +103,30 @@ namespace XmlSourceDocDemo
                 Type typ = typeof(TDomain);
                 this.memorySource.Clear();
             }
+        }
+
+        public bool Exist(TDomain domainObj)
+        {
+            bool result = false;
+
+            if (this.memorySource.Any(a => a.Value.Id == domainObj.Id))
+            {
+                result = true;
+            }
+
+            return result;
+        }
+
+        public bool ExistById(Guid id)
+        {
+            bool result = false;
+
+            if (this.memorySource.Any(a => a.Value.Id == id))
+            {
+                result = true;
+            }
+
+            return result;
         }
     }
 
