@@ -1,9 +1,11 @@
-﻿namespace XmlSourceDocDemo
+﻿using System;
+
+namespace XmlSourceDocDemo
 {
     /// <summary>
     /// Eine kleine Demo Klasse
     /// </summary>
-    public class DemoClassShort
+    public class DemoClassShort : IDomainRoot
     {
         /// <summary>
         /// Konstruktor ohne Parameter
@@ -11,6 +13,16 @@
         public DemoClassShort()
         {
         }
+
+        /// <summary>
+        /// Object Id
+        /// </summary>
+        public Guid Id { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public string ClassName { get; set; }
 
         /// <summary>
         /// Klasseninhalt als String zurückgeben

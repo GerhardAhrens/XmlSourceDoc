@@ -128,6 +128,16 @@
             Konstruktor ohne Parameter
             </summary>
         </member>
+        <member name="P:XmlSourceDocDemo.DemoClassShort.Id">
+            <summary>
+            Object Id
+            </summary>
+        </member>
+        <member name="P:XmlSourceDocDemo.DemoClassShort.ClassName">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="M:XmlSourceDocDemo.DemoClassShort.ToString">
             <summary>
             Klasseninhalt als String zurückgeben

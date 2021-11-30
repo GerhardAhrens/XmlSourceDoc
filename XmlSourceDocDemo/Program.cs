@@ -20,6 +20,16 @@
     {
         private static void Main(string[] args)
         {
+            DemoClassShort dom = new DemoClassShort();
+            dom.Id = Guid.NewGuid();
+            dom.ClassName = "Test-A";
+
+            InMemoryRepository<DemoClassShort> repository = new InMemoryRepository<DemoClassShort>();
+            repository.Add(dom);
+
+            dom.ClassName = "Test-B";
+            repository.Update(dom);
+
             // read XML file to get info about documented methods
             string xmlFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "XmlSourceDocDemo.xml");
             XmlSourceDocumentation xd = new XmlSourceDocumentation(xmlFile);
