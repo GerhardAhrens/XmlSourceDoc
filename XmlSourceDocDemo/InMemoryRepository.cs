@@ -109,9 +109,12 @@ namespace XmlSourceDocDemo
         {
             bool result = false;
 
-            if (this.memorySource.Any(a => a.Value.Id == domainObj.Id))
+            if (this.memorySource != null)
             {
-                result = true;
+                if (this.memorySource.Any(a => a.Value.Id == domainObj.Id))
+                {
+                    result = true;
+                }
             }
 
             return result;
@@ -121,12 +124,30 @@ namespace XmlSourceDocDemo
         {
             bool result = false;
 
-            if (this.memorySource.Any(a => a.Value.Id == id))
+            if (this.memorySource != null)
             {
-                result = true;
+                if (this.memorySource.Any(a => a.Value.Id == id))
+                {
+                    result = true;
+                }
             }
 
             return result;
+        }
+
+        public void SaveList(string filename)
+        {
+            if (this.memorySource != null && this.memorySource.Count > 0)
+            {
+            }
+        }
+
+        public void LoadList(string filename)
+        {
+            if (this.memorySource != null && this.memorySource.Count > 0)
+            {
+                this.memorySource.Clear();
+            }
         }
     }
 
