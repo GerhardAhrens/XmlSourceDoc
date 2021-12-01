@@ -5,16 +5,22 @@ namespace XmlSourceDocDemo
     using System;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
+    using System.Runtime.Serialization.Formatters.Binary;
     using System.Text;
     using System.Threading.Tasks;
+    using System.Xml;
+    using System.Xml.Schema;
+    using System.Xml.Serialization;
 
     public class InMemoryRepository<TDomain> : IRepository<TDomain> where TDomain : IDomainRoot
     {
-        List<MemoryContent<TDomain>> memorySource = null;
+        private List<SerializableKeyValuePair<Type,TDomain>> memorySource = null;
+
         public InMemoryRepository()
         {
-            this.memorySource = new List<MemoryContent<TDomain>>(); 
+            this.memorySource = new List<SerializableKeyValuePair<Type,TDomain>>(); 
         }
 
         public int CountAll()
@@ -28,7 +34,7 @@ namespace XmlSourceDocDemo
             if (memorySource != null)
             {
                 Type typ = typeof(TDomain);
-                result = this.memorySource.Count(w => w.Key == typ);
+                result = this.memorySource.Count(w => w.Key == typ.Name);
             }
 
             return result;
@@ -54,7 +60,7 @@ namespace XmlSourceDocDemo
             if (this.memorySource != null)
             {
                 Type typ = typeof(TDomain);
-                MemoryContent<TDomain> mc = new MemoryContent<TDomain>(typ, domainObj);
+                SerializableKeyValuePair<Type, TDomain> mc = new SerializableKeyValuePair<Type, TDomain>(typ, domainObj);
                 this.memorySource.Add(mc);
             }
         }
@@ -66,7 +72,7 @@ namespace XmlSourceDocDemo
                 Type typ = typeof(TDomain);
                 TDomain oldDomain = (TDomain)this.memorySource.Where(w => w.Value.Id == domainObj.Id).FirstOrDefault().Value;
                 var index = this.memorySource.FindIndex(w => w.Value.Id == oldDomain.Id);
-                MemoryContent<TDomain> mc = new MemoryContent<TDomain>(typ, domainObj);
+                SerializableKeyValuePair<Type, TDomain> mc = new SerializableKeyValuePair<Type, TDomain>(typ, domainObj);
                 this.memorySource[index] = mc;
             }
         }
@@ -76,7 +82,7 @@ namespace XmlSourceDocDemo
             if (this.memorySource != null)
             {
                 Type typ = typeof(TDomain);
-                MemoryContent<TDomain> mc = new MemoryContent<TDomain>(typ, domainObj);
+                SerializableKeyValuePair<Type, TDomain> mc = new SerializableKeyValuePair<Type, TDomain>(typ, domainObj);
                 this.memorySource.Remove(mc);
             }
         }
@@ -86,11 +92,11 @@ namespace XmlSourceDocDemo
             if (this.memorySource != null)
             {
                 Type typ = typeof(TDomain);
-                List<TDomain> byType = this.memorySource.Where(c => c.Key == typ).Select(s => s.Value).ToList();
+                List<TDomain> byType = this.memorySource.Where(c => c.Key == typ.Name).Select(s => s.Value).ToList();
                 for (int i = 0; i < byType.Count; i++)
                 {
                     TDomain oldDomain = this.memorySource.Where(w => w.Value.Id == byType[i].Id).FirstOrDefault().Value;
-                    MemoryContent<TDomain> mc = new MemoryContent<TDomain>(typ, oldDomain);
+                    SerializableKeyValuePair<Type, TDomain> mc = new SerializableKeyValuePair<Type, TDomain>(typ, oldDomain);
                     this.memorySource.Remove(mc);
                 }
             }
@@ -135,25 +141,39 @@ namespace XmlSourceDocDemo
             return result;
         }
 
-        public void SaveList(string filename)
+        public void SaveContent(string filename)
         {
             if (this.memorySource != null && this.memorySource.Count > 0)
             {
+                XmlSerializer serializer = XmlSerializer.FromTypes(new[] { typeof(List<SerializableKeyValuePair<Type, TDomain>>) })[0];
+                using (TextWriter textWriter = new StreamWriter(filename))
+                {
+                    serializer.Serialize(textWriter, this.memorySource);
+                    textWriter.Close();
+                }
             }
         }
 
-        public void LoadList(string filename)
+        public void LoadContent(string filename)
         {
             if (this.memorySource != null && this.memorySource.Count > 0)
             {
                 this.memorySource.Clear();
             }
+
+            XmlSerializer serializer = XmlSerializer.FromTypes(new[] { typeof(List<SerializableKeyValuePair<Type, TDomain>>) })[0];
+            using (TextReader rdr = new StreamReader(filename))
+            {
+                this.memorySource = (List<SerializableKeyValuePair<Type, TDomain>>)serializer.Deserialize(rdr);
+                rdr.Close();
+            }
+
         }
     }
 
     public interface IDomainRoot
     {
-        Guid Id { get; }
+        Guid Id { get; set; }
     }
 
     public interface IRepository<TDomain> where TDomain : IDomainRoot
@@ -167,26 +187,24 @@ namespace XmlSourceDocDemo
         void Delete(TDomain domainObj);
     }
 
-    public sealed class MemoryContent<TDomain> : Tuple<Type, TDomain>
+    [Serializable]
+    public sealed class SerializableKeyValuePair<Type, TDomain>
     {
-        public MemoryContent(Type key, TDomain value) : base(key,value)
+
+        public SerializableKeyValuePair()
         {
         }
 
-        public Type Key
+        public SerializableKeyValuePair(Type key, TDomain value)
         {
-            get
-            {
-                return this.Item1;
-            }
+            this.Key = typeof(TDomain).Name;
+            this.Value = value;
         }
 
-        public TDomain Value
-        {
-            get
-            {
-                return this.Item2;
-            }
-        }
+        //[XmlIgnore]
+        public string Key { get; set; }
+
+        public TDomain Value { get; set; }
+
     }
 }

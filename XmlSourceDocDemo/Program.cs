@@ -37,6 +37,10 @@
             repository.Add(dom2);
             Console.WriteLine($"Count={repository.CountByType()}", ConsoleColor.Yellow);
 
+            repository.SaveContent(@"c:\temp\test.xml");
+
+            repository.LoadContent(@"c:\temp\test.xml");
+
             Console.WriteLine($"FindById: {dom.Id}");
             DemoClassShort result1 = repository.FindById(dom.Id);
             Console.WriteLine($"Result:{result1.ClassName};Id={result1.Id}");

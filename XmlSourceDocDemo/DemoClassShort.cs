@@ -1,16 +1,26 @@
 ﻿using System;
+using System.Xml.Serialization;
 
 namespace XmlSourceDocDemo
 {
     /// <summary>
     /// Eine kleine Demo Klasse
     /// </summary>
+    [Serializable]
     public class DemoClassShort : IDomainRoot
     {
         /// <summary>
         /// Konstruktor ohne Parameter
         /// </summary>
         public DemoClassShort()
+        {
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="param"></param>
+        public DemoClassShort(string param)
         {
         }
 
