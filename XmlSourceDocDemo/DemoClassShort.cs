@@ -7,7 +7,7 @@ namespace XmlSourceDocDemo
     /// Eine kleine Demo Klasse
     /// </summary>
     [Serializable]
-    public class DemoClassShort : IDomainRoot
+    public class DemoClassShort 
     {
         /// <summary>
         /// Konstruktor ohne Parameter

@@ -75,9 +75,41 @@
                 Dictionary<string,Tuple<string,string,string>> xmlMemberParams = new Dictionary<string, Tuple<string, string, string>>();
                 if (element.Elements("param") != null && element.Elements("param").Count() > 0)
                 {
-                    Dictionary<XElement,string> paramsFromTag = new Dictionary<XElement,string>();
+                    Dictionary<XElement, string> paramsFromTag = new Dictionary<XElement, string>();
+                    string parameterFull = xmlFullnameWithTypes.ExtractFromString("(", ")").Where(x => x != null).ToList()[0];
+                    int countParameters = element.Elements("param").Count();
+                    List<string> parameterList = new List<string>();
+
+                    foreach (XElement item in element.Elements("param"))
+                    {
+                        string paramName = item.FirstAttribute.Value;
+                        if (parameterFull.Contains("{") == true && parameterFull.Contains("}") == true)
+                        {
+                            int lastPos = parameterFull.LastIndexOf("}")+1;
+                            string genericParam = parameterFull.Substring(0, lastPos);
+                            parameterList.Add(genericParam);
+
+                            parameterFull = parameterFull.Remove(0, lastPos);
+                            if (parameterFull.IndexOf(',') == 0) 
+                            {
+                                parameterFull = parameterFull.Remove(0, 1);
+                            }
+                        }
+                        else
+                        {
+                            if (parameterFull.Contains(",") == true)
+                            {
+                                string[] partParam = parameterFull.Split(",", StringSplitOptions.RemoveEmptyEntries);
+                                parameterList.AddRange(partParam);
+                            }
+                            else
+                            {
+                                parameterList.Add(parameterFull);
+                            }
+                        }
+                    }
+
                     List<string> tempParameters = xmlFullnameWithTypes.ExtractFromString("(", ")").Where(x => x != null).ToList();
-                    List<string> parameterList = null;
                     if (tempParameters[0].Contains("{") == true && tempParameters[0].Contains("}") == true)
                     {
                         parameterList = new List<string>();
@@ -86,13 +118,6 @@
                     else
                     {
                         parameterList = tempParameters[0].Split(',', StringSplitOptions.RemoveEmptyEntries).ToList();
-                    }
-
-                    int parameterIndex = 0;
-                    foreach (XElement item in element.Elements("param"))
-                    {
-                        paramsFromTag.Add(item, parameterList[parameterIndex]);
-                        parameterIndex++;
                     }
 
                     foreach (KeyValuePair<XElement, string> item in paramsFromTag)
@@ -114,10 +139,9 @@
                             int lastPos = item.Value.LastIndexOf('.') + 1;
                             paramType = item.Value.Substring(lastPos);
                         }
-
                         xmlMemberParams.Add(paramName, new Tuple<string, string, string>(paramType, paramItemTyp, paramDescription));
-                    }
                 }
+            }
 
                 string xmlReturn = string.Empty;
                 if (element.Element("returns") != null)
