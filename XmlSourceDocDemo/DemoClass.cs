@@ -65,6 +65,18 @@
         {
         }
 
+        /// <summary>
+        /// Konstruktormethode mit Parameter, Tuple, Dictionary, DateTime
+        /// </summary>
+        /// <param name="argsTuple"></param>
+        /// <param name="argsDict"></param>
+        /// <param name="argsDt"></param>
+        public DemoClassFull(Tuple<string, bool> argsTuple, 
+            Dictionary<Guid,string> argsDict, 
+            DateTime argsDt)
+        {
+        }
+
 
         /// <summary>
         /// Get/Set for Numeric Value

@@ -52,6 +52,14 @@
             <param name="args"></param>
             <param name="argsBool"></param>
         </member>
+        <member name="M:XmlSourceDocDemo.DemoClassFull.#ctor(System.Tuple{System.String,System.Boolean},System.Collections.Generic.Dictionary{System.Guid,System.String},System.DateTime)">
+            <summary>
+            Konstruktormethode mit Parameter, Tuple, Dictionary, DateTime
+            </summary>
+            <param name="argsTuple"></param>
+            <param name="argsDict"></param>
+            <param name="argsDt"></param>
+        </member>
         <member name="P:XmlSourceDocDemo.DemoClassFull.Numeric">
             <summary>
             Get/Set for Numeric Value
