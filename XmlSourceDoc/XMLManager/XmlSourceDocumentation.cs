@@ -651,6 +651,55 @@
             }
         }
 
+        private List<string> SplitTerm(string paramInput)
+        {
+            List<string> result = null;
+            List<Tuple<int, int, bool>> paramPos = null;
+
+            try
+            {
+                if (string.IsNullOrEmpty(paramInput) == false)
+                {
+                    int posStart = 0;
+                    int posEnd = 0;
+                    bool isComma = false;
+                    paramPos = new List<Tuple<int, int, bool>>();
+                    for (int i = 0; i < paramInput.Length; i++)
+                    {
+                        if (paramInput[i] == '{')
+                        {
+                            posStart = i;
+                        }
+
+                        if (paramInput[i] == '}')
+                        {
+                            posEnd = i;
+                        }
+
+                        if (paramInput[i] == ',')
+                        {
+                            isComma = true;
+                        }
+
+                        if (posStart > 0 && posEnd > 0)
+                        {
+                            Tuple<int, int, bool> pos = new Tuple<int, int, bool>(posStart, posEnd, false);
+                            paramPos.Add(pos);
+                            posStart = 0;
+                            posEnd = 0;
+                            isComma = false;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return result;
+        }
+
         #region Dispose
         public void Dispose()
         {

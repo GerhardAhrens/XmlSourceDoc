@@ -20,6 +20,9 @@
     {
         private static void Main(string[] args)
         {
+            string i = "(System.Tuple{System.String,System.Boolean},System.Collections.Generic.Dictionary{System.Guid,System.String},System.DateTime)";
+            var bb = SplitTerm(i);
+
             // read XML file to get info about documented methods
             string xmlFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "XmlSourceDocDemo.xml");
             XmlSourceDocumentation xd = new XmlSourceDocumentation(xmlFile);
@@ -134,5 +137,70 @@
 
             Console.ReadKey();
         }
+
+        private static List<string> SplitTerm(string paramInput)
+        {
+            List<string> result = null;
+            List<Tuple<int, int,string>> paramPos = null;
+
+            try
+            {
+                if (string.IsNullOrEmpty(paramInput) == false)
+                {
+                    int posStart = 0;
+                    int posEnd = 0;
+                    bool termGeneric = false;
+                    string typ = string.Empty;
+                    paramPos = new List<Tuple<int, int,string>>();
+                    for (int i = 0; i < paramInput.Length; i++)
+                    {
+                        if (paramInput[i] == '(' && paramInput[paramInput.Length-1] == ')')
+                        {
+                            posStart = i +1;
+                            posEnd = paramInput.Length -2;
+                            typ = "S";
+                        }
+
+                        if (paramInput[i] == '{')
+                        {
+                            posStart = i;
+                            termGeneric = true;
+                            typ = string.Empty;
+                        }
+
+                        if (paramInput[i] == '}')
+                        {
+                            posEnd = i;
+                            termGeneric = false;
+                            typ = string.Empty;
+                        }
+
+                        if (termGeneric == false && paramInput[i] == ',')
+                        {
+                            posStart = i;
+                            posEnd = i;
+                            typ = "C";
+                        }
+
+                        if (posStart > 0 && posEnd > 0)
+                        {
+                            Tuple<int, int,string> pos = new Tuple<int, int,string>(posStart, posEnd, typ);
+                            paramPos.Add(pos);
+                            posStart = 0;
+                            posEnd = 0;
+                            termGeneric = false;
+                            typ = string.Empty;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            return result;
+        }
+
     }
 }
