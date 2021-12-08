@@ -83,30 +83,6 @@
                     foreach (XElement item in element.Elements("param"))
                     {
                         string paramName = item.FirstAttribute.Value;
-                        if (parameterFull.Contains("{") == true && parameterFull.Contains("}") == true)
-                        {
-                            int lastPos = parameterFull.LastIndexOf("}")+1;
-                            string genericParam = parameterFull.Substring(0, lastPos);
-                            parameterList.Add(genericParam);
-
-                            parameterFull = parameterFull.Remove(0, lastPos);
-                            if (parameterFull.IndexOf(',') == 0) 
-                            {
-                                parameterFull = parameterFull.Remove(0, 1);
-                            }
-                        }
-                        else
-                        {
-                            if (parameterFull.Contains(",") == true)
-                            {
-                                string[] partParam = parameterFull.Split(",", StringSplitOptions.RemoveEmptyEntries);
-                                parameterList.AddRange(partParam);
-                            }
-                            else
-                            {
-                                parameterList.Add(parameterFull);
-                            }
-                        }
                     }
 
                     List<string> tempParameters = xmlFullnameWithTypes.ExtractFromString("(", ")").Where(x => x != null).ToList();
@@ -651,45 +627,62 @@
             }
         }
 
-        private List<string> SplitTerm(string paramInput)
+        public IEnumerable<string> SplitTerm(string paramInput)
         {
-            List<string> result = null;
-            List<Tuple<int, int, bool>> paramPos = null;
+            IEnumerable<string> result = null;
+            List<Tuple<int, int, string>> paramPos = null;
 
             try
             {
+                if (paramInput.StartsWith("(") == true && paramInput.EndsWith(")") == true)
+                {
+                    paramInput = paramInput.Replace("(", string.Empty).Replace(")", string.Empty);
+                }
+
                 if (string.IsNullOrEmpty(paramInput) == false)
                 {
                     int posStart = 0;
                     int posEnd = 0;
-                    bool isComma = false;
-                    paramPos = new List<Tuple<int, int, bool>>();
+                    bool termGeneric = false;
+                    string typ = string.Empty;
+                    paramPos = new List<Tuple<int, int, string>>();
                     for (int i = 0; i < paramInput.Length; i++)
                     {
                         if (paramInput[i] == '{')
                         {
                             posStart = i;
+                            termGeneric = true;
+                            typ = string.Empty;
                         }
 
                         if (paramInput[i] == '}')
                         {
                             posEnd = i;
+                            termGeneric = false;
+                            typ = string.Empty;
                         }
 
-                        if (paramInput[i] == ',')
+                        if (termGeneric == false && paramInput[i] == ',')
                         {
-                            isComma = true;
+                            posStart = i;
+                            posEnd = i;
+                            typ = "C";
                         }
 
                         if (posStart > 0 && posEnd > 0)
                         {
-                            Tuple<int, int, bool> pos = new Tuple<int, int, bool>(posStart, posEnd, false);
+                            Tuple<int, int, string> pos = new Tuple<int, int, string>(posStart, posEnd, typ);
                             paramPos.Add(pos);
                             posStart = 0;
                             posEnd = 0;
-                            isComma = false;
+                            termGeneric = false;
+                            typ = string.Empty;
                         }
                     }
+
+                    int[] posIndex = paramPos.Where(w => w.Item3 == "C").Select(s => s.Item1).ToArray();
+                    result = paramInput.SplitAt(posIndex).Select(s => s.Replace(",", string.Empty));
+
                 }
             }
             catch (Exception)

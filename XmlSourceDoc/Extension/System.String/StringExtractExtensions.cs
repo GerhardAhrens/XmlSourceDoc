@@ -1,6 +1,6 @@
 //-----------------------------------------------------------------------
-// <copyright file="StringExtensions.cs" company="PTA">
-//     Class: StringExtensions
+// <copyright file="StringExtractExtensions.cs" company="PTA">
+//     Class: StringExtractExtensions
 //     Copyright © PTA GmbH 2016
 // </copyright>
 //
