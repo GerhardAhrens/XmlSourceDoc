@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>D:\_LCubeRepositories\XmlSourceDoc\XmlSourceDocDemo\XmlSourceDocDemo.xml</DocumentationFile>
+    <DocumentationFile>d:\_LCubeRepositories\XmlSourceDoc\XmlSourceDocDemo\XmlSourceDocDemo.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

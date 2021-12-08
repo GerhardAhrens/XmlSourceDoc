@@ -21,7 +21,8 @@
         private static void Main(string[] args)
         {
             // read XML file to get info about documented methods
-            string xmlFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "XmlSourceDocDemo.xml");
+            DirectoryInfo di = new DirectoryInfo(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+            string xmlFile = Path.Combine(di.Parent.Parent.Parent.FullName, "XmlSourceDocDemo.xml");
             XmlSourceDocumentation xd = new XmlSourceDocumentation(xmlFile);
             var aa = xd.Get();
 

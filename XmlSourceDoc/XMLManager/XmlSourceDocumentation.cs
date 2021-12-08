@@ -78,49 +78,22 @@
                 Dictionary<string,Tuple<string,string,string>> xmlMemberParams = new Dictionary<string, Tuple<string, string, string>>();
                 if (element.Elements("param") != null && element.Elements("param").Count() > 0)
                 {
-                    Dictionary<XElement, string> paramsFromTag = new Dictionary<XElement, string>();
                     string parameterFull = xmlFullnameWithTypes.ExtractFromString("(", ")").Where(x => x != null).ToList()[0];
-                    int countParameters = element.Elements("param").Count();
                     List<string> parameterList = new List<string>();
 
+                    IEnumerable<string> terms = this.SplitTerm(parameterFull);
+
+                    int paramPos = 0;
                     foreach (XElement item in element.Elements("param"))
                     {
                         string paramName = item.FirstAttribute.Value;
-                    }
-
-                    List<string> tempParameters = xmlFullnameWithTypes.ExtractFromString("(", ")").Where(x => x != null).ToList();
-                    if (tempParameters[0].Contains("{") == true && tempParameters[0].Contains("}") == true)
-                    {
-                        parameterList = new List<string>();
-                        parameterList.Add(tempParameters[0]);
-                    }
-                    else
-                    {
-                        parameterList = tempParameters[0].Split(',', StringSplitOptions.RemoveEmptyEntries).ToList();
-                    }
-
-                    foreach (KeyValuePair<XElement, string> item in paramsFromTag)
-                    {
-                        string paramName = item.Key.FirstAttribute.Value;
-                        string paramDescription = ((XText)item.Key.FirstNode)?.Value;
-                        string paramType = string.Empty;
-                        string paramItemTyp = string.Empty;
-                        if (item.Value.Contains("{") == true && item.Value.Contains("}") == true)
-                        {
-                            int firstPos = item.Value.LastIndexOf('{');
-                            string paramTypeTemp = item.Value.Substring(0, firstPos);
-                            int lastPos = paramTypeTemp.LastIndexOf('.') + 1;
-                            paramType = paramTypeTemp.Substring(lastPos);
-                            paramItemTyp = item.Value.ExtractFromString("{", "}").Where(x => x != null).ToList()[0];
-                        }
-                        else
-                        {
-                            int lastPos = item.Value.LastIndexOf('.') + 1;
-                            paramType = item.Value.Substring(lastPos);
-                        }
+                        string paramItemTyp = terms.ElementAt(paramPos);
+                        string paramType = paramItemTyp.Contains("{") == true ? paramItemTyp.Substring(0, paramItemTyp.IndexOf("{")): paramItemTyp;
+                        string paramDescription = (XText)item.FirstNode == null ? string.Empty : ((XText)item.FirstNode).Value;
                         xmlMemberParams.Add(paramName, new Tuple<string, string, string>(paramType, paramItemTyp, paramDescription));
+                        paramPos++;
+                    }
                 }
-            }
 
                 string xmlReturn = string.Empty;
                 if (element.Element("returns") != null)
