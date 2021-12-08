@@ -20,8 +20,6 @@
     {
         private static void Main(string[] args)
         {
-            string i = "(System.Tuple{System.String,System.Boolean},System.Collections.Generic.Dictionary{System.Guid,System.String},System.DateTime,System.String)";
-
             // read XML file to get info about documented methods
             string xmlFile = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "XmlSourceDocDemo.xml");
             XmlSourceDocumentation xd = new XmlSourceDocumentation(xmlFile);

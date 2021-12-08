@@ -17,6 +17,9 @@
         private bool classIsDisposed = false;
         private readonly Dictionary<string, MemberDocumentation> MemberSummaries = new Dictionary<string, MemberDocumentation>();
 
+        public XmlSourceDocumentation()
+        {
+        }
 
         /// <summary>
         /// Load method information from XML documentation file
