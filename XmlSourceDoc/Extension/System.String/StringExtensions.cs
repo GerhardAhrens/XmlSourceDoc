@@ -18,11 +18,28 @@ namespace System
 
     public static class StringExtensions
     {
-        public static IEnumerable<string> SplitAt(this string source, params int[] index)
+        public static IEnumerable<string> SplitAt(this string @this, params int[] index)
         {
-            var indices = new[] { 0 }.Union(index).Union(new[] { source.Length });
+            var indices = new[] { 0 }.Union(index).Union(new[] { @this.Length });
 
-            return indices.Zip(indices.Skip(1), (a, b) => (a, b)).Select(_ => source.Substring(_.a, _.b - _.a));
+            return indices.Zip(indices.Skip(1), (a, b) => (a, b)).Select(_ => @this.Substring(_.a, _.b - _.a));
+        }
+
+        public static IEnumerable<string> SplitAt(this string @this, char removeChar, params int[] index)
+        {
+            var indices = new[] { 0 }.Union(index).Union(new[] { @this.Length });
+
+            return indices.Zip(indices.Skip(1), (a, b) => (a, b)).Select(_ => @this.Substring(_.a, _.b - _.a).RemoveChar(removeChar).ToString());
+        }
+
+        public static string RemoveChar(this string @this, params char[] removingChars)
+        {
+            foreach (char c in removingChars)
+            {
+                @this = @this.Replace(c.ToString(), string.Empty);
+            }
+
+            return @this;
         }
     }
 }

@@ -681,7 +681,7 @@
                     }
 
                     int[] posIndex = paramPos.Where(w => w.Item3 == "C").Select(s => s.Item1).ToArray();
-                    result = paramInput.SplitAt(posIndex).Select(s => s.Replace(",", string.Empty));
+                    result = paramInput.SplitAt(',',posIndex);
 
                 }
             }

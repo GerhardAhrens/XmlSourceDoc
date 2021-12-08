@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XmlSourceDoc", "XmlSourceDoc\XmlSourceDoc.csproj", "{E2C9DEEE-3392-49A5-AEC5-3ACA4504DC43}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlSourceDocDemo", "XmlSourceDocDemo\XmlSourceDocDemo.csproj", "{5974342B-E873-446A-ADFE-397933798BA2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XmlSourceDocDemo", "XmlSourceDocDemo\XmlSourceDocDemo.csproj", "{5974342B-E873-446A-ADFE-397933798BA2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XmlSourceDocTest", "XmlSourceDocTest\XmlSourceDocTest.csproj", "{B15D6551-D28D-41D9-8A93-51451D22D131}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{5974342B-E873-446A-ADFE-397933798BA2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5974342B-E873-446A-ADFE-397933798BA2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5974342B-E873-446A-ADFE-397933798BA2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B15D6551-D28D-41D9-8A93-51451D22D131}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B15D6551-D28D-41D9-8A93-51451D22D131}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B15D6551-D28D-41D9-8A93-51451D22D131}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B15D6551-D28D-41D9-8A93-51451D22D131}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
